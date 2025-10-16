@@ -1,0 +1,14 @@
+Nome: Tiago
+Idade: 24
+
+Peso: 54,1
+Altura: 161,9
+Altura TC: 139
+Flexibilidade: 45
+Abdominal: 26
+
+Arremesso MB: 3,4
+Salto Horizontal 122
+Salto Vertical 21,9
+
+Ca
