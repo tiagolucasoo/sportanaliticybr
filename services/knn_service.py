@@ -2,8 +2,8 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
-from services.knn_maps import Futebol, Volei, Basquete, Lutas, Natacao, Handebol
-#from data.dados import Futebol, Volei, Basquete, Lutas, Natacao
+
+from services.knn_maps import Volei, Futebol, Basquete, Lutas, Natacao, Handebol
 
 def tipo_esporte(classe_esporte, nome_esporte):
     esporte_data = {
@@ -46,7 +46,7 @@ print("-" * 40)
 # 2. SEUS DADOS PARA CLASSIFICAÇÃO
 # A ordem das colunas deve ser EXATAMENTE a mesma do DataFrame acima (exceto 'esporte')
 
-meus_dados1 = np.array([[
+marcelo = np.array([[
     20,
     182, # altura_cm
     77.6,  # peso_kg
@@ -57,7 +57,7 @@ meus_dados1 = np.array([[
     52    # abdominais_1min
 ]])
 
-meus_dados = np.array([[
+sla = np.array([[
     25,
     173, # altura_cm
     73.1,  # peso_kg
@@ -68,7 +68,7 @@ meus_dados = np.array([[
     25    # abdominais_1min
 ]])
 
-meus_dados2 = np.array([[
+eu = np.array([[
     24,
     161.9, # altura_cm
     54.1,  # peso_kg
@@ -95,10 +95,17 @@ y_train_encoded = label_encoder.fit_transform(y_train_labels)
 scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 
+def info_dados():
+    list = []
+    list.append(len(Futebol.list_idade()))
+    list.append(len(Volei.list_idade()))
+    list.append(len(Basquete.list_idade()))
+    list.append(len(Lutas.list_idade()))
+    list.append(len(Natacao.list_idade()))
+    list.append(len(Handebol.list_idade()))
+    return list
 
-# 4. CRIAÇÃO E TREINAMENTO DO MODELO K-NN
-# Com poucos dados, um k pequeno é melhor. Vamos usar k=3
-k = 10
+k = len(info_dados())
 knn = KNeighborsClassifier(n_neighbors=k)
 knn.fit(X_train_scaled, y_train_encoded)
 
@@ -108,7 +115,7 @@ print("-" * 40)
 
 # 5. CLASSIFICANDO SEU PERFIL
 # IMPORTANTE: Seus dados devem ser transformados com o MESMO scaler treinado acima
-meus_dados_scaled = scaler.transform(meus_dados2)
+meus_dados_scaled = scaler.transform(sla)
 
 # Fazendo a previsão
 previsao_numerica = knn.predict(meus_dados_scaled)

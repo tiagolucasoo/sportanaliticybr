@@ -40,8 +40,6 @@ class Futebol:
                 55, 57, 59, 61, 63,
                 46, 48, 50, 52, 54,
                 56, 58, 60, 62, 64]
-
-
 class Volei:
     @staticmethod
     def list_idade():
@@ -84,8 +82,6 @@ class Volei:
                 50, 52, 54, 56, 58,
                 60, 38, 40, 42, 44,
                 46, 48, 39, 41, 43]
-
-
 class Basquete:
     @staticmethod
     def list_idade():
@@ -128,7 +124,6 @@ class Basquete:
                 60, 62, 64, 66, 68,
                 52, 54, 56, 58, 60,
                 62, 64, 66, 68, 70]
-
 class Lutas:
     @staticmethod
     def list_idade():
@@ -171,7 +166,6 @@ class Lutas:
                 52, 54, 47, 56, 53,
                 57, 50, 55, 52, 56,
                 49, 54, 53, 56, 51]
-
 class Natacao:
     @staticmethod
     def list_idade():
@@ -256,3 +250,13 @@ class Handebol:
                 54, 55, 57, 58, 60,
                 46, 48, 50, 52, 54,
                 55, 57, 58, 59, 60]
+
+def info_dados():
+    list = []
+    list.append(len(Futebol.list_idade()))
+    list.append(len(Volei.list_idade()))
+    list.append(len(Basquete.list_idade()))
+    list.append(len(Lutas.list_idade()))
+    list.append(len(Natacao.list_idade()))
+    list.append(len(Handebol.list_idade()))
+    return list
