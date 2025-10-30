@@ -1,63 +1,125 @@
 import customtkinter
-import tkinter as tk
-from tkinter import messagebox
-import os 
 
-class view_cadastro_categorias(customtkinter.CTkFrame):
-    def __init__(self, parent, controller_instance):
-        super().__init__(parent)
+class App(customtkinter.CTk):
+    def __init__(self):
+        super().__init__()
+        self.geometry("800x600")
+        self.title("Sport Analiticy Br")
 
-        self.controller = controller_instance
-        self.conferir_categorias = None
+        self.containerDados01()
+        self.containerDados02()
+        #self.containerDados03()
+        self.containerBotao()
+        self.atualizacaoBarraProgresso()
+
+        #container_codigos = customtkinter.CTkFrame(App, fg_color="transparent")
+
+    def listLabels(self):
+        return [
+            "Dados Biométricos", #Container01
+            "Indicadores de Perfomance", #Container02
+            "Rotina de Treino", #Container03
+        ]
+
+    def containerDados01(self):
+        labels = self.listLabels()
+
+        label01 = customtkinter.CTkLabel(self, text=labels[0])
+        label01.pack(pady=(10, 2))
+
+        subcontainer01 = customtkinter.CTkFrame(self, fg_color="transparent")
+        subcontainer01.pack(side="top", pady=10)
+        self.nome = customtkinter.CTkEntry(subcontainer01, placeholder_text="Nome", width=680)
+        self.nome.pack(side="left", padx=20)
         
-        # Rodapé
-        info_ssec = customtkinter.CTkLabel(self, text="SSEC - Versão 1.0 | Desenvolvido por Tiago Lucas (GitHub: Tiagolucasoo)", fg_color="transparent")
-        info_ssec.place(relx=0.0, rely=1.0, anchor="sw", x=10, y=-10)
+        subcontainer02 = customtkinter.CTkFrame(self, fg_color="transparent")
+        subcontainer02.pack(side="top", pady=10)
+        self.idade = customtkinter.CTkEntry(subcontainer02, placeholder_text="Idade", width=200)
+        self.idade.pack(side="right", padx=20)
+        self.altura = customtkinter.CTkEntry(subcontainer02, placeholder_text="Altura (cm)", width=200)
+        self.altura.pack(side="left", padx=20)
+        self.peso = customtkinter.CTkEntry(subcontainer02, placeholder_text="Peso (kg)", width=200)
+        self.peso.pack(side="right", padx=20)
 
-        def configuracao_form(): #Width, Height e características padrão para o formulário (Fazer o chamado em Kwargs **)
-            CONFIG_BOTOES = {"width":200, "height":50, "border_width":0, "border_color":'#000', "text_color":'#001F21'}
-            CONFIG_INPUTS1 = {"width":600, "height":50, "border_width":0} #1 por Linha
-            CONFIG_INPUTS2 = {"width":275, "height":50} #2 por Linha
-            return CONFIG_BOTOES, CONFIG_INPUTS1, CONFIG_INPUTS2
+    def containerDados02(self):
+        labels = self.listLabels()
+        label02 = customtkinter.CTkLabel(self, text=labels[1])
+        label02.pack(pady=(10, 2))
+
+        subcontainer03 = customtkinter.CTkFrame(self, fg_color="transparent")
+        subcontainer03.pack(side="top", pady=10)
+        self.salto_vertical = customtkinter.CTkEntry(subcontainer03, placeholder_text="Salto Vertical (cm)", width=320)
+        self.salto_vertical.pack(side="left", padx=20)
+        self.salto_horizontal = customtkinter.CTkEntry(subcontainer03, placeholder_text="Salto Horizontal (cm)", width=320)
+        self.salto_horizontal.pack(side="right", padx=20)
+
+        subcontainer04 = customtkinter.CTkFrame(self, fg_color="transparent")
+        subcontainer04.pack(side="top", pady=10)
+        self.arremesso = customtkinter.CTkEntry(subcontainer04, placeholder_text="Arremesso (m)", width=200)
+        self.arremesso.pack(side="left", padx=20)
+        self.abdominais = customtkinter.CTkEntry(subcontainer04, placeholder_text="Abdominais (nº)", width=200)
+        self.abdominais.pack(side="right", padx=20)
+        self.flexibilidade = customtkinter.CTkEntry(subcontainer04, placeholder_text="Flexibilidade (cm)", width=200)
+        self.flexibilidade.pack(side="right", padx=20)
+
+    # def containerDados03(self):
+    #     labels = self.listLabels()
+    #     label03 = customtkinter.CTkLabel(self, text=labels[2])
+    #     label03.pack(pady=(10, 2))
+
+    #     self.d3_frequencia = customtkinter.CTkEntry(self, placeholder_text="Treinos por semana")
+    #     self.d3_frequencia.pack()
+
+    #     self.d3_duracao = customtkinter.CTkEntry(self, placeholder_text="Duração do treino (min)")
+    #     self.d3_duracao.pack()
+
+    def button_callback(self):
+        nome = self.d1_nome.get()
+        idade = self.d1_idade.get()
+        print(f"Botão clicado! Nome: {nome}, Idade: {idade}")
         
-        CONFIG_BOTOES, CONFIG_INPUTS1, CONFIG_INPUTS2 = configuracao_form()
-        
-        #Código da Categoria
-        self.label_codigo_categoria = customtkinter.CTkLabel(self, width=600, height=50, text="Código da Categoria", fg_color="transparent")
-        self.label2_codigo_categoria = customtkinter.CTkLabel(self, width=600, height=50, text="", fg_color="transparent")
-        self.label2_codigo_categoria.pack()
+    def containerBotao(self):
+        subcontainer05 = customtkinter.CTkFrame(self, fg_color="transparent")
+        subcontainer05.pack(side="top", pady=10)
 
-        #Descrição da Categoria
-        self.label_desc_categoria = customtkinter.CTkLabel(self, text="Nome da Categoria", fg_color="transparent")
-        self.label_desc_categoria.pack()
-        self.input_desc_categoria = customtkinter.CTkEntry(self, **CONFIG_INPUTS1, placeholder_text="Digite aqui o nome da categoria")
-        self.input_desc_categoria.pack()
+        salvar = customtkinter.CTkButton(subcontainer05, text="Salvar", command=self.button_callback, width=440)
+        salvar.pack(side="left", padx=20, pady=20)
 
-        #Categorias existentes 000
-        # def categoriasExistentes():
-        #     categorias = self.controller.listarCategorias()
-        #     self.label5 = customtkinter.CTkLabel(self, text="Categorias Existentes", fg_color="transparent")
-        #     #Fazer uma função para esse check de categoria que reutilizo na sugestão de compras
-        #     self.box_categoria = customtkinter.CTkComboBox(self, **CONFIG_INPUTS1, values=list(categorias))
-        #     self.box_categoria.set("Selecione a Categoria")
-        #     self.box_categoria.pack()
-        #     self.conferir_categorias = customtkinter.CTkButton(self, **CONFIG_BOTOES, fg_color="#029B99", text="Conferir Categorias", command="")
-            
-        container_botoes = customtkinter.CTkFrame(self, fg_color="transparent")
-        container_botoes.pack(side="top")
+        limpar = customtkinter.CTkButton(subcontainer05, text="Limpar", command=self.button_callback, width=200)
+        limpar.pack(side="right", padx=20, pady=20)
 
-        # #Botões
-        # self.limpar_categoria = customtkinter.CTkButton(container_botoes, **CONFIG_BOTOES, fg_color="#ffc107", hover_color="#e0a800", text="Limpar Campos", command=self.limpar_campos_view)
-        # self.limpar_categoria.pack(side="left", padx=20, pady=20)
-        # self.salvar_categoria = customtkinter.CTkButton(container_botoes, **CONFIG_BOTOES, fg_color="#28a745", hover_color="#218838", text="Cadastrar Categoria", command=self.salvar_dados_da_view)
-        # self.salvar_categoria.pack(side="left", padx=20, pady=20)
+        self.progressbar = customtkinter.CTkProgressBar(self, orientation="horizontal", width=680, height=20, determinate_speed=1000)
+        self.progressbar.pack()
+        self.labelProgresso = customtkinter.CTkLabel(self, text="")
+        self.labelProgresso.pack(pady=(10, 2))
 
-    # def salvar_dados_da_view(self):
-    #     descricao_categoria = self.input_desc_categoria.get()
-    #     self.controller.cadastrarCategoria(descricao_categoria)
+    def atualizacaoBarraProgresso(self):
+        lista = ["nome", "idade", "altura", "peso", "arremesso","abdominais", "flexibilidade", "salto_horizontal", "salto_vertical"]
+    
+        itens_preenchidos = 0
+        total_itens = len(lista)
 
-    # def limpar_campos_view(self):
-    #     self.input_desc_categoria.delete(0, tk.END)
-    #     self.input_desc_categoria.focus_set()
-    #     os.system('cls')
-    #     print("-- Terminal e demais campos limpos")
+        for nome_do_widget in lista:
+            try:
+                widget = getattr(self, nome_do_widget)
+                
+                if widget.get() != "":
+                    itens_preenchidos += 1
+                    
+            except AttributeError:
+                print(f"Aviso: O widget '{nome_do_widget}' ainda não foi criado.")
+            except Exception as e:
+                print(f"Erro ao ler o widget '{nome_do_widget}': {e}")
+
+        if total_itens > 0:
+            progresso = itens_preenchidos / total_itens
+        else:
+            progresso = 0.0
+
+        self.progressbar.set(progresso)
+        self.labelProgresso.configure(text=f"Cadastro {round(progresso*100)} %")
+        self.after(100, self.atualizacaoBarraProgresso)
+
+if __name__ == "__main__":
+    app = App()
+    app.mainloop()

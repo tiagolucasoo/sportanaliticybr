@@ -27,3 +27,4 @@ def cadastro_usuario():
     conn.close()
 
 cadastro_usuario()
+#inserir_dados("Nome", 50, 150, 50, 50, 50, 50, 50)
