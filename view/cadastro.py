@@ -1,4 +1,9 @@
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import customtkinter
+import controller.controller as controller
 from components.menu import containerMenu
 
 class App(customtkinter.CTk):
@@ -8,10 +13,9 @@ class App(customtkinter.CTk):
         self.title("Sport Analiticy Br")
 
         containerMenu(self, nome_pagina="Cadastro de Atletas")
-
+        self.controller = controller.ControllerAtleta(self)
         self.containerDados01()
         self.containerDados02()
-        #self.containerDados03()
         self.containerBotao()
         self.atualizacaoBarraProgresso()
 
@@ -23,8 +27,6 @@ class App(customtkinter.CTk):
             "Indicadores de Perfomance", #Container02
             "Rotina de Treino", #Container03
         ]
-
-    
 
     def containerDados01(self):
         labels = self.listLabels()
@@ -62,26 +64,30 @@ class App(customtkinter.CTk):
         subcontainer04.pack(side="top", pady=10)
         self.arremesso = customtkinter.CTkEntry(subcontainer04, placeholder_text="Arremesso (m)", width=200)
         self.arremesso.pack(side="left", padx=20)
-        self.abdominais = customtkinter.CTkEntry(subcontainer04, placeholder_text="Abdominais (nº)", width=200)
-        self.abdominais.pack(side="right", padx=20)
+        self.resistencia = customtkinter.CTkEntry(subcontainer04, placeholder_text="Abdominais (nº)", width=200)
+        self.resistencia.pack(side="right", padx=20)
         self.flexibilidade = customtkinter.CTkEntry(subcontainer04, placeholder_text="Flexibilidade (cm)", width=200)
         self.flexibilidade.pack(side="right", padx=20)
 
-    # def containerDados03(self):
-    #     labels = self.listLabels()
-    #     label03 = customtkinter.CTkLabel(self, text=labels[2])
-    #     label03.pack(pady=(10, 2))
-
-    #     self.d3_frequencia = customtkinter.CTkEntry(self, placeholder_text="Treinos por semana")
-    #     self.d3_frequencia.pack()
-
-    #     self.d3_duracao = customtkinter.CTkEntry(self, placeholder_text="Duração do treino (min)")
-    #     self.d3_duracao.pack()
+    def mostrar_mensagem_status(self, mensagem):
+        self.labelProgresso.configure(text=mensagem)
 
     def button_callback(self):
-        nome = self.d1_nome.get()
-        idade = self.d1_idade.get()
-        print(f"Botão clicado! Nome: {nome}, Idade: {idade}")
+        try:
+            nome = self.nome.get()
+            idade = int(self.idade.get())
+            altura = float(self.altura.get())
+            peso = float(self.peso.get())
+            salto_v = float(self.salto_vertical.get())
+            salto_h = float(self.salto_horizontal.get())
+            arremesso = float(self.arremesso.get())
+            resistencia = int(self.resistencia.get())
+            flexibilidade = float(self.flexibilidade.get())
+
+            self.controller.salvar_atleta(nome, idade, altura, peso, salto_v, salto_h, arremesso, resistencia, flexibilidade)
+        
+        except ValueError as ve:
+            print(f"Erro de valor: {ve}")
         
     def containerBotao(self):
         subcontainer05 = customtkinter.CTkFrame(self, fg_color="transparent")
@@ -99,7 +105,7 @@ class App(customtkinter.CTk):
         self.labelProgresso.pack(pady=(10, 2))
 
     def atualizacaoBarraProgresso(self):
-        lista = ["nome", "idade", "altura", "peso", "arremesso","abdominais", "flexibilidade", "salto_horizontal", "salto_vertical"]
+        lista = ["nome", "idade", "altura", "peso", "arremesso","resistencia", "flexibilidade", "salto_horizontal", "salto_vertical"]
     
         itens_preenchidos = 0
         total_itens = len(lista)

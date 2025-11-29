@@ -11,7 +11,7 @@ def containerMenu(master, nome_pagina="Página Inicial"):
 
     styleButton = estiloButtonsMenu()
 
-    menu_container = customtkinter.CTkFrame(master, height=250, fg_color="transparent", border_color="#1F271B", border_width=3, corner_radius=10)
+    menu_container = customtkinter.CTkFrame(master, height=250, fg_color="transparent", border_color="#1F271B", border_width=2, corner_radius=5)
     menu_container.pack(side="top", pady=10)
 
     titulo = customtkinter.CTkLabel(menu_container, text="Menu de Navegação", width=200, font=customtkinter.CTkFont(size=20, weight="bold"))
