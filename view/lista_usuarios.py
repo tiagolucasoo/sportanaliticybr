@@ -1,10 +1,13 @@
 import customtkinter
+from components.menu import containerMenu
 
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
         self.geometry("800x600")
         self.title("Sport Analiticy Br")
+
+        containerMenu(self, nome_pagina="Consulta de Atletas")
 
         self.containerDados01()
         
