@@ -34,16 +34,27 @@ class ControllerAtleta:
         #Valores
         dict_esportes = json.loads(dados_atleta["valores_esportes"])
         dict_convert = list(dict_esportes.values())
-        valor_basquete = int(dict_esportes['Basquete'])
-        valor_futebol = int(dict_esportes['Futebol'])
-        valor_handebol = int(dict_esportes['Handebol'])
-        valor_lutas = int(dict_esportes['Lutas'])
-        valor_natacao = int(dict_esportes['Natação'])
-        valor_volei = int(dict_esportes['Vôlei'])
+
+        valor_basquete = dict_esportes['Basquete']
+        valor_futebol = dict_esportes['Futebol']
+        valor_handebol = dict_esportes['Handebol']
+        valor_lutas = dict_esportes['Lutas']
+        valor_natacao = dict_esportes['Natação']
+        valor_volei = dict_esportes['Vôlei']
+
+        print(f"Valores dos Esportes: {dict_convert}")
+        print(valor_basquete)
+        print(valor_futebol)
 
         grafico_path = self.dashboard_service.gerar_grafico(
             atleta_id=nome,
-            esportes=dict_esportes
+            basquete=valor_basquete,
+            futebol=valor_futebol,
+            handebol=valor_handebol,
+            lutas=valor_lutas,
+            natacao=valor_natacao,
+            volei=valor_volei,
+            esporte=esporte_recomendado
         )
         
         dados_atleta["grafico_path"] = grafico_path
@@ -61,3 +72,6 @@ class ControllerAtleta:
     def buscar_atleta_por_nome(self, nome):
         resultado = self.model.buscar_por_nome(nome)
         return resultado
+
+    def buscar_todos_atletas(self):
+        return self.model.buscar_todos()

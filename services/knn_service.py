@@ -45,16 +45,7 @@ class KnnService:
         x_scaled = self.scaler.fit_transform(X_train_dados)
         y_encoded = self.label_encoder.fit_transform(y_train_valor)
 
-        def info_dados():
-            list = []
-            list.append(len(Futebol.list_idade()))
-            list.append(len(Volei.list_idade()))
-            list.append(len(Basquete.list_idade()))
-            list.append(len(Lutas.list_idade()))
-            list.append(len(Natacao.list_idade()))
-            list.append(len(Handebol.list_idade()))
-            return list
-        k = len(info_dados())
+        k = 11
         self.knn = KNeighborsClassifier(n_neighbors=k)
         self.knn.fit(x_scaled, y_encoded)
         print("Modelo KNN treinado com sucesso!")
@@ -84,8 +75,6 @@ class KnnService:
         }
 
         print(f"Esporte previsto: {previsao_esporte}")
-        print(previsao_encoded)
-        print(probabilidades)
-
-        return previsao_esporte, esporte_probabilidade
+        print(f"Probabilidades: {esporte_probabilidade}")
+        return previsao_esporte, esporte_probabilidade  
     

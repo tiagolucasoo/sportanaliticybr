@@ -79,3 +79,19 @@ class ModelAtleta:
             return None
         finally:
             conn.close()
+
+    def buscar_todos(self):
+        try:
+            conn = self.rota_banco()
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT nome, altura, peso, idade, esporte_recomendado
+                FROM usuario
+            """)
+            resultados = cursor.fetchall()
+            return resultados
+        except Exception as e:
+            print(f"Erro ao buscar dados no banco: {e}")
+            return []
+        finally:
+            conn.close()

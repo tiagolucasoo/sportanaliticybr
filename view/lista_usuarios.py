@@ -1,56 +1,78 @@
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import customtkinter
 from components.menu import containerMenu
+import controller.controller as controller
 
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
-        self.geometry("800x600")
+        self.geometry("900x600")
         self.title("Sport Analiticy Br")
+        self.controller = controller.ControllerAtleta(self)
 
         containerMenu(self, nome_pagina="Consulta de Atletas")
 
-        self.containerDados01()
-        
-        self.containerTabela()
+        self.container_header()
+        self.container_tabela()
         self.configurar_tabela()
 
-    def listLabels(self):
-        return [
-            "Consulta de Usuários", 
-            "Arrumar", 
-            "Arrumar", 
-        ]
+    def container_header(self):
+        frame = customtkinter.CTkFrame(self, fg_color="transparent")
+        frame.pack(pady=(20, 5), padx=20)
 
-    def containerDados01(self):
-        labels = self.listLabels()
+        titulo = customtkinter.CTkLabel(
+            frame,
+            text="Consulta de Atletas",
+            font=("Arial", 22, "bold")
+        )
+        titulo.pack()
 
-        label01 = customtkinter.CTkLabel(self, text=labels[0])
-        label01.pack(pady=(10, 2))
+        subtitulo = customtkinter.CTkLabel(
+            frame,
+            text="Veja abaixo a lista de atletas cadastrados e seus resultados",
+            font=("Arial", 14)
+        )
+        subtitulo.pack(anchor="w")
 
-
-
-    def containerTabela(self):
-        self.frame_resultados = customtkinter.CTkScrollableFrame(self, height=350, width=760)
-        self.frame_resultados.pack(pady=10, padx=20)
+    def container_tabela(self):
+        self.frame_resultados = customtkinter.CTkScrollableFrame(
+            self,
+            height=400,
+            width=800,
+            fg_color="#fff"
+        )
+        self.frame_resultados.pack(pady=20, padx=20, fill="both", expand=True)
 
     def configurar_tabela(self):
         for widget in self.frame_resultados.winfo_children():
             widget.destroy()
 
-        colunas = ["Nome", "Esporte Sugerido", "Altura", "Peso", "Idade", "Salto V.", "Salto H.", "Arremesso", "Flexibilidade", "Resistência"]
+        colunas = ["Nome", "Altura", "Peso", "Idade", "Esporte Sugerido"]
+        largura = [300, 75, 75, 75, 200]
 
-        for i, texto_coluna in enumerate(colunas):
+        for i, texto in enumerate(colunas):
             label = customtkinter.CTkLabel(
-                self.frame_resultados, 
-                text=texto_coluna, 
-                font=("Arial", 12, "bold"),
-                width=10
+                self.frame_resultados,
+                text=texto,
+                font=("Arial", 14, "bold"),
+                width=largura[i]
             )
-            label.grid(row=0, column=i, padx=5, pady=5)
+            label.grid(row=0, column=i, padx=10, pady=8, sticky="w")
+        
+        atletas = self.controller.buscar_todos_atletas()
+        for linha, atleta in enumerate(atletas, start=1):
+            for coluna, valor in enumerate(atleta):
+                label = customtkinter.CTkLabel(
+                    self.frame_resultados,
+                    text=str(valor),
+                    font=("Arial", 12),
+                    width=largura[coluna]
+                )
+                label.grid(row=linha, column=coluna, padx=10, pady=5, sticky="w")
 
-    
-    def button_callback(self):
-        print("!")
 
 if __name__ == "__main__":
     app = App()

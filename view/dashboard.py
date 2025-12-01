@@ -56,7 +56,9 @@ class App(customtkinter.CTk):
         label_resultado = customtkinter.CTkLabel(self,
                                          text=
                                          f"""
-                                            Nome: {resultado[1]}, Idade: {resultado[2]}, Peso: {resultado[3]}, Altura: {resultado[3]}, Flexibilidade: {resultado[4]}, Resistência: {resultado[5]}, Arremesso: {resultado[6]}, Salto Vertical: {resultado[7]}, Salto Horizontal: {resultado[8]}  """,
+                                            Nome: {resultado[1]}, Idade: {resultado[2]}, Peso: {resultado[3]}, Altura: {resultado[3]},
+                                            Flexibilidade: {resultado[4]}, Resistência: {resultado[5]}, Arremesso: {resultado[6]},
+                                            Salto Vertical: {resultado[7]}, Salto Horizontal: {resultado[8]}  """,
                                          text_color="#000000",
                                          font=customtkinter.CTkFont(size=14))
         label_resultado.pack(pady=10)
