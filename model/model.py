@@ -25,7 +25,9 @@ class ModelAtleta:
                     resistencia INT NOT NULL,
                     arremesso DECIMAL(8,2) NOT NULL,
                     salto_vertical INT NOT NULL,
-                    salto_horizontal INT NOT NULL
+                    salto_horizontal INT NOT NULL,
+                    esporte_recomendado VARCHAR(30),
+                    grafico_path VARCHAR(255)
                 )
             ''')
             print("Banco de Dados e Tabela de Usuários conectada\n")
@@ -33,15 +35,16 @@ class ModelAtleta:
             conn.close()
         except Exception as e:
             print(f"Erro ao conectar ao banco de dados: {e}")
-    
+
     def inserir_dados(self, dados_atleta):
         try:
             conn = self.rota_banco()
             cursor = conn.cursor()
             cursor.execute(
                 '''
-                INSERT INTO usuario (nome, idade, altura, peso, salto_vertical, salto_horizontal, arremesso, resistencia, flexibilidade)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO usuario (nome, idade, altura, peso, salto_vertical, salto_horizontal,
+                arremesso, resistencia, flexibilidade, esporte_recomendado, grafico_path)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ''',
                 (
                     dados_atleta["nome"],
@@ -52,12 +55,27 @@ class ModelAtleta:
                     dados_atleta["salto_horizontal"],
                     dados_atleta["arremesso"],
                     dados_atleta["resistencia"],
-                    dados_atleta["flexibilidade"]
+                    dados_atleta["flexibilidade"],
+                    dados_atleta["esporte_recomendado"],
+                    dados_atleta["grafico_path"]
                 )
             )
             conn.commit()
             print(f"Dados do(a) {dados_atleta['nome']} inseridos com sucesso no banco de dados.")
         except Exception as e:
             print(f"Erro ao inserir dados no banco de dados: {e}")
+        finally:
+            conn.close()
+    
+    def buscar_por_nome(self, nome):
+        try:
+            conn = self.rota_banco()
+            cursor = conn.cursor()
+            cursor.execute('SELECT * FROM usuario WHERE nome = ?', (nome,))
+            resultado = cursor.fetchone()
+            return resultado
+        except Exception as e:
+            print(f"Erro ao buscar dados no banco de dados: {e}")
+            return None
         finally:
             conn.close()

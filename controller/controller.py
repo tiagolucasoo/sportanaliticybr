@@ -1,14 +1,19 @@
 from model.model import ModelAtleta
+from services.knn_service import KnnService
+from services.controller_dashboard import ControllerDashboard
+import json
 
 class ControllerAtleta:
     def __init__(self, view):
         self.view = view
         self.model = ModelAtleta()
+        self.knn_service = KnnService()
+        self.dashboard_service = ControllerDashboard()
 
     def salvar_atleta(self, nome, idade, altura, peso, salto_v, salto_h, arremesso, resistencia, flexibilidade):
         print("-" * 30)
         print("CONTROLLER: Dados Recebidos da View")
-        
+
         dados_atleta = {
             "nome": nome,
             "idade": idade,
@@ -21,14 +26,38 @@ class ControllerAtleta:
             "flexibilidade": flexibilidade
         }
         
-        print(f"Dados processados: {dados_atleta}")
 
-        self.model.inserir_dados(dados_atleta)
+        esporte_recomendado, probabilidades = self.knn_service.prever_esporte(dados_atleta)
+        dados_atleta["esporte_recomendado"] = esporte_recomendado
+        dados_atleta["valores_esportes"] = json.dumps(probabilidades)
+
+        #Valores
+        dict_esportes = json.loads(dados_atleta["valores_esportes"])
+        dict_convert = list(dict_esportes.values())
+        valor_basquete = int(dict_esportes['Basquete'])
+        valor_futebol = int(dict_esportes['Futebol'])
+        valor_handebol = int(dict_esportes['Handebol'])
+        valor_lutas = int(dict_esportes['Lutas'])
+        valor_natacao = int(dict_esportes['Natação'])
+        valor_volei = int(dict_esportes['Vôlei'])
+
+        grafico_path = self.dashboard_service.gerar_grafico(
+            atleta_id=nome,
+            esportes=dict_esportes
+        )
         
-        # Knn - Analise
+        dados_atleta["grafico_path"] = grafico_path
+        self.model.inserir_dados(dados_atleta)
         
         self.view.mostrar_mensagem_status("Sucesso! Controller e Model conectados.")
         print("-" * 30)
 
+    def salvar_esporte(self, esporte):
+        print(f"Esporte recomendado: {esporte}")
+
     def mostrar_erro(self, mensagem):
         print(f"ERRO: {mensagem}")
+    
+    def buscar_atleta_por_nome(self, nome):
+        resultado = self.model.buscar_por_nome(nome)
+        return resultado

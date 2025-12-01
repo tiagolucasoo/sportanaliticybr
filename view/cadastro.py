@@ -1,5 +1,6 @@
 import sys
 import os
+import time
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import customtkinter
@@ -14,65 +15,75 @@ class App(customtkinter.CTk):
 
         containerMenu(self, nome_pagina="Cadastro de Atletas")
         self.controller = controller.ControllerAtleta(self)
-        self.containerDados01()
-        self.containerDados02()
+        self.containerDadosFisicos()
+        self.containerIndicadores()
         self.containerBotao()
         self.atualizacaoBarraProgresso()
-
-        #container_codigos = customtkinter.CTkFrame(App, fg_color="transparent")
-
+    
     def listLabels(self):
         return [
-            "Dados Biométricos", #Container01
-            "Indicadores de Perfomance", #Container02
-            "Rotina de Treino", #Container03
+            "Dados Físicos", #Container01
+            "Indicadores", #Container02
         ]
+    def estiloEntrys(self):
+        entry_style = {
+            "border_color": "#E0E0FF",
+            "border_width": 2,
+            "corner_radius": 5
+        }
+        return entry_style
 
-    def containerDados01(self):
+    def containerDadosFisicos(self):
         labels = self.listLabels()
 
-        label01 = customtkinter.CTkLabel(self, text=labels[0])
-        label01.pack(pady=(10, 2))
+        label_fisico = customtkinter.CTkLabel(self, 
+                                         text=labels[0],
+                                         text_color="#645DD7",
+                                         font=customtkinter.CTkFont(size=16, weight="bold"))
+        label_fisico.pack(pady=(10, 2))
 
-        subcontainer01 = customtkinter.CTkFrame(self, fg_color="transparent")
-        subcontainer01.pack(side="top", pady=10)
-        self.nome = customtkinter.CTkEntry(subcontainer01, placeholder_text="Nome", width=680)
+        subcontainer_nome = customtkinter.CTkFrame(self, fg_color="transparent")
+        subcontainer_nome.pack(side="top", pady=10)
+        self.nome = customtkinter.CTkEntry(subcontainer_nome, placeholder_text="Nome", width=680, **self.estiloEntrys())
         self.nome.pack(side="left", padx=20)
         
-        subcontainer02 = customtkinter.CTkFrame(self, fg_color="transparent")
-        subcontainer02.pack(side="top", pady=10)
-        self.idade = customtkinter.CTkEntry(subcontainer02, placeholder_text="Idade", width=200)
+        subcontainer_fisico = customtkinter.CTkFrame(self, fg_color="transparent")
+        subcontainer_fisico.pack(side="top", pady=10)
+        self.idade = customtkinter.CTkEntry(subcontainer_fisico, placeholder_text="Idade", width=200, **self.estiloEntrys())
         self.idade.pack(side="right", padx=20)
-        self.altura = customtkinter.CTkEntry(subcontainer02, placeholder_text="Altura (cm)", width=200)
+        self.altura = customtkinter.CTkEntry(subcontainer_fisico, placeholder_text="Altura (cm)", width=200, **self.estiloEntrys())
         self.altura.pack(side="left", padx=20)
-        self.peso = customtkinter.CTkEntry(subcontainer02, placeholder_text="Peso (kg)", width=200)
+        self.peso = customtkinter.CTkEntry(subcontainer_fisico, placeholder_text="Peso (kg)", width=200, **self.estiloEntrys())
         self.peso.pack(side="right", padx=20)
 
-    def containerDados02(self):
+    def containerIndicadores(self):
         labels = self.listLabels()
-        label02 = customtkinter.CTkLabel(self, text=labels[1])
-        label02.pack(pady=(10, 2))
+        label_indicador = customtkinter.CTkLabel(self,
+                                         text=labels[1],
+                                         text_color="#645DD7",
+                                         font=customtkinter.CTkFont(size=16, weight="bold"))
+        label_indicador.pack(pady=(10, 2))
 
-        subcontainer03 = customtkinter.CTkFrame(self, fg_color="transparent")
-        subcontainer03.pack(side="top", pady=10)
-        self.salto_vertical = customtkinter.CTkEntry(subcontainer03, placeholder_text="Salto Vertical (cm)", width=320)
+        subcontainer_salto = customtkinter.CTkFrame(self, fg_color="transparent")
+        subcontainer_salto.pack(side="top", pady=10)
+        self.salto_vertical = customtkinter.CTkEntry(subcontainer_salto, placeholder_text="Salto Vertical (cm)", width=320, **self.estiloEntrys())
         self.salto_vertical.pack(side="left", padx=20)
-        self.salto_horizontal = customtkinter.CTkEntry(subcontainer03, placeholder_text="Salto Horizontal (cm)", width=320)
+        self.salto_horizontal = customtkinter.CTkEntry(subcontainer_salto, placeholder_text="Salto Horizontal (cm)", width=320, **self.estiloEntrys())
         self.salto_horizontal.pack(side="right", padx=20)
 
-        subcontainer04 = customtkinter.CTkFrame(self, fg_color="transparent")
-        subcontainer04.pack(side="top", pady=10)
-        self.arremesso = customtkinter.CTkEntry(subcontainer04, placeholder_text="Arremesso (m)", width=200)
+        subcontainer_forca = customtkinter.CTkFrame(self, fg_color="transparent")
+        subcontainer_forca.pack(side="top", pady=10)
+        self.arremesso = customtkinter.CTkEntry(subcontainer_forca, placeholder_text="Arremesso (m)", width=200, **self.estiloEntrys())
         self.arremesso.pack(side="left", padx=20)
-        self.resistencia = customtkinter.CTkEntry(subcontainer04, placeholder_text="Abdominais (nº)", width=200)
+        self.resistencia = customtkinter.CTkEntry(subcontainer_forca, placeholder_text="Abdominais (nº)", width=200, **self.estiloEntrys())
         self.resistencia.pack(side="right", padx=20)
-        self.flexibilidade = customtkinter.CTkEntry(subcontainer04, placeholder_text="Flexibilidade (cm)", width=200)
+        self.flexibilidade = customtkinter.CTkEntry(subcontainer_forca, placeholder_text="Flexibilidade (cm)", width=200, **self.estiloEntrys())
         self.flexibilidade.pack(side="right", padx=20)
 
     def mostrar_mensagem_status(self, mensagem):
         self.labelProgresso.configure(text=mensagem)
 
-    def button_callback(self):
+    def button_cadastro(self):
         try:
             nome = self.nome.get()
             idade = int(self.idade.get())
@@ -85,21 +96,39 @@ class App(customtkinter.CTk):
             flexibilidade = float(self.flexibilidade.get())
 
             self.controller.salvar_atleta(nome, idade, altura, peso, salto_v, salto_h, arremesso, resistencia, flexibilidade)
-        
+            
         except ValueError as ve:
             print(f"Erro de valor: {ve}")
+    
+    def limpar_campos(self):
+        self.nome.delete(0, customtkinter.END)
+        self.idade.delete(0, customtkinter.END)
+        self.altura.delete(0, customtkinter.END)
+        self.peso.delete(0, customtkinter.END)
+        self.salto_vertical.delete(0, customtkinter.END)
+        self.salto_horizontal.delete(0, customtkinter.END)
+        self.arremesso.delete(0, customtkinter.END)
+        self.resistencia.delete(0, customtkinter.END)
+        self.flexibilidade.delete(0, customtkinter.END)
+        self.mostrar_mensagem_status("Campos limpos com sucesso.")
         
     def containerBotao(self):
         subcontainer05 = customtkinter.CTkFrame(self, fg_color="transparent")
         subcontainer05.pack(side="top", pady=10)
 
-        salvar = customtkinter.CTkButton(subcontainer05, text="Salvar", command=self.button_callback, width=440)
+        salvar = customtkinter.CTkButton(subcontainer05, text="Salvar", command=self.button_cadastro, width=440)
         salvar.pack(side="left", padx=20, pady=20)
 
-        limpar = customtkinter.CTkButton(subcontainer05, text="Limpar", command=self.button_callback, width=200)
+        limpar = customtkinter.CTkButton(subcontainer05, text="Limpar", command=self.limpar_campos, width=200)
         limpar.pack(side="right", padx=20, pady=20)
 
-        self.progressbar = customtkinter.CTkProgressBar(self, orientation="horizontal", width=680, height=20, determinate_speed=1000)
+        self.progressbar = customtkinter.CTkProgressBar(self,
+                                                        orientation="horizontal",
+                                                        width=680,
+                                                        height=20,
+                                                        determinate_speed=1000,
+                                                        fg_color="#E0E0FF",
+                                                        progress_color="#FF0066")
         self.progressbar.pack()
         self.labelProgresso = customtkinter.CTkLabel(self, text="")
         self.labelProgresso.pack(pady=(10, 2))
@@ -126,6 +155,15 @@ class App(customtkinter.CTk):
             progresso = itens_preenchidos / total_itens
         else:
             progresso = 0.0
+        
+        if progresso == 0:
+            self.progressbar.configure(progress_color="#E0E0FF")
+        elif progresso < 0.4:
+            self.progressbar.configure(progress_color="#FF4242")
+        elif progresso < 0.7:
+            self.progressbar.configure(progress_color="#645DD7")
+        else:
+            self.progressbar.configure(progress_color="#00CC99")
 
         self.progressbar.set(progresso)
         self.labelProgresso.configure(text=f"Cadastro {round(progresso*100)} %")
