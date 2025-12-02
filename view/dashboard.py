@@ -3,18 +3,16 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import customtkinter
-from components.menu import containerMenu
 import controller.controller as controller
 
-class App(customtkinter.CTk):
-    def __init__(self):
-        super().__init__()
-        self.geometry("800x800")
-        self.title("Sport Analiticy Br")
-        
+class DashboardFrame(customtkinter.CTkFrame):
+    def __init__(self, master):
+        super().__init__(master)
         self.controller = controller.ControllerAtleta(self)
-        containerMenu(self, nome_pagina="Dashboard")
         self.containerPesquisaId()
+
+        self.container_grafico = customtkinter.CTkFrame(self, fg_color="transparent")
+        self.container_grafico.pack(pady=10)
     
     def listLabels(self):
         return [
@@ -47,13 +45,16 @@ class App(customtkinter.CTk):
         salvar = customtkinter.CTkButton(subcontainer, text="Consultar", command=self.button_callback, width=150)
         salvar.pack(side="left", padx=10, pady=20)
 
-        limpar = customtkinter.CTkButton(subcontainer, text="Limpar", command=self.button_callback, width=75)
+        limpar = customtkinter.CTkButton(subcontainer, text="Limpar", command=self.limpar_campos, width=75)
         limpar.pack(side="right", padx=10, pady=20)
 
     def button_callback(self):
         nome = self.nome.get()
+        self.limpar_resultados()
+        
         resultado = self.controller.buscar_atleta_por_nome(nome)
-        label_resultado = customtkinter.CTkLabel(self,
+        label_resultado = customtkinter.CTkLabel(
+                                        self.container_grafico,
                                          text=
                                          f"""
                                             Nome: {resultado[1]}, Idade: {resultado[2]}, Peso: {resultado[3]}, Altura: {resultado[3]},
@@ -70,18 +71,20 @@ class App(customtkinter.CTk):
             from PIL import Image
             img = Image.open(grafico_path)            
             grafico_base = customtkinter.CTkImage(light_image=img, size=(600, 400))
-            grafico = customtkinter.CTkLabel(self, image=grafico_base, text="")
+            self.grafico_base = grafico_base
+            grafico = customtkinter.CTkLabel(self.container_grafico, image=grafico_base, text="")
             grafico.pack()
         else:
             customtkinter.CTkLabel(
-                self,
+                self.container_grafico,
                 text="Gráfico não disponível.",
                 text_color="#FF0000"
             ).pack()
 
+    def limpar_resultados(self):
+        for widget in self.container_grafico.winfo_children():
+            widget.destroy()
     
-
-
-if __name__ == "__main__":
-    app = App()
-    app.mainloop()
+    def limpar_campos(self):
+        self.nome.delete(0, customtkinter.END)
+        self.limpar_resultados()

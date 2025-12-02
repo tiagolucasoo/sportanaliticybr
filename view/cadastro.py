@@ -4,15 +4,11 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import customtkinter
 import controller.controller as controller
-from components.menu import containerMenu
 
-class App(customtkinter.CTk):
-    def __init__(self):
-        super().__init__()
-        self.geometry("800x600")
-        self.title("Sport Analiticy Br")
+class CadastroFrame(customtkinter.CTkFrame):
+    def __init__(self, master):
+        super().__init__(master)
 
-        containerMenu(self, nome_pagina="Cadastro de Atletas")
         self.controller = controller.ControllerAtleta(self)
         self.containerDadosFisicos()
         self.containerIndicadores()
@@ -167,7 +163,3 @@ class App(customtkinter.CTk):
         self.progressbar.set(progresso)
         self.labelProgresso.configure(text=f"Cadastro {round(progresso*100)} %")
         self.after(100, self.atualizacaoBarraProgresso)
-
-if __name__ == "__main__":
-    app = App()
-    app.mainloop()

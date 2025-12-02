@@ -3,17 +3,12 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import customtkinter
-from components.menu import containerMenu
 import controller.controller as controller
 
-class App(customtkinter.CTk):
-    def __init__(self):
-        super().__init__()
-        self.geometry("900x600")
-        self.title("Sport Analiticy Br")
+class ListaUsuariosFrame(customtkinter.CTkFrame):
+    def __init__(self, master):
+        super().__init__(master)
         self.controller = controller.ControllerAtleta(self)
-
-        containerMenu(self, nome_pagina="Consulta de Atletas")
 
         self.container_header()
         self.container_tabela()
@@ -72,8 +67,3 @@ class App(customtkinter.CTk):
                     width=largura[coluna]
                 )
                 label.grid(row=linha, column=coluna, padx=10, pady=5, sticky="w")
-
-
-if __name__ == "__main__":
-    app = App()
-    app.mainloop()
