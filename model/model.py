@@ -102,3 +102,21 @@ class ModelConsulta:
             return []
         finally:
             conn.close()
+        
+    def atualizar_grafico_path(self, nome, novo_caminho):
+        try:
+            conn = self.rota_banco()
+            cursor = conn.cursor()
+            cursor.execute("""
+                UPDATE usuario 
+                SET grafico_path = ? 
+                WHERE nome = ?
+            """, (novo_caminho, nome))
+            conn.commit()
+            print(f"Gráfico de {nome} atualizado para: {novo_caminho}")
+            return True
+        except Exception as e:
+            print(f"Erro ao atualizar gráfico: {e}")
+            return False
+        finally:
+            conn.close()

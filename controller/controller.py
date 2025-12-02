@@ -5,6 +5,7 @@ from model.elo_dashboard import DashboardHandler
 
 from model.model import ModelConsulta
 import json
+import os
 
 class ControllerAtleta:
     def __init__(self, view):
@@ -43,12 +44,54 @@ class ControllerAtleta:
 
     def salvar_esporte(self, esporte):
         print(f"Esporte recomendado: {esporte}")
-
     
     def buscar_atleta_por_nome(self, nome):
         model = ModelConsulta()
-        return model.buscar_por_nome(nome)
+        dados_atleta = model.buscar_por_nome(nome)
 
+        if not dados_atleta:
+            return None
+
+        id_db, nome_db, idade, peso, altura, flexibilidade, resistencia, arremesso, salto_vertical, salto_horizontal, esporte_recomendado, grafico_path = dados_atleta
+
+        if grafico_path and os.path.exists(grafico_path):
+            return dados_atleta
+
+        try:
+            print("[CONSULTA] Gráfico ausente — recalculando probabilidades com KNN e gerando gráfico...")
+            dados_para_elo = {
+                "nome": nome_db,
+                "idade": idade,
+                "peso": peso,
+                "altura": altura,
+                "flexibilidade": flexibilidade,
+                "resistencia": resistencia,
+                "arremesso": arremesso,
+                "salto_vertical": salto_vertical,
+                "salto_horizontal": salto_horizontal
+            }
+
+            h2 = ClassificacaoHandler()
+            h3 = DashboardHandler()
+            h2.set_proximo(h3)
+
+            h2.processar(dados_para_elo)
+
+            novo_grafico = dados_para_elo.get("grafico_path")
+            novo_esporte = dados_para_elo.get("esporte_recomendado", esporte_recomendado)
+
+            model.atualizar_grafico_path(nome_db, novo_grafico)
+
+            lista = list(dados_atleta)
+            lista[10] = novo_esporte
+            lista[11] = novo_grafico
+
+            return tuple(lista)
+
+        except Exception as e:
+            print(f"Erro ao regenerar gráfico na consulta: {e}")
+            return dados_atleta
+    
     def buscar_todos_atletas(self):
         model = ModelConsulta()
         return model.buscar_todos()

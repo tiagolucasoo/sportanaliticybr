@@ -55,11 +55,7 @@ class DashboardFrame(customtkinter.CTkFrame):
         resultado = self.controller.buscar_atleta_por_nome(nome)
         label_resultado = customtkinter.CTkLabel(
                                         self.container_grafico,
-                                         text=
-                                         f"""
-                                            Nome: {resultado[1]}, Idade: {resultado[2]}, Peso: {resultado[3]}, Altura: {resultado[3]},
-                                            Flexibilidade: {resultado[4]}, Resistência: {resultado[5]}, Arremesso: {resultado[6]},
-                                            Salto Vertical: {resultado[7]}, Salto Horizontal: {resultado[8]}  """,
+                                         text=f"Buscando dados de {resultado[1]}",
                                          text_color="#000000",
                                          font=customtkinter.CTkFont(size=14))
         label_resultado.pack(pady=10)

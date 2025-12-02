@@ -17,7 +17,6 @@ class App(customtkinter.CTk):
         # Menu Principal
         self.menu = Menu(self, self.trocar_tela)
         
-        # Container onde as telas se sobrepõem
         self.container_telas = customtkinter.CTkFrame(self, fg_color="transparent")
         self.container_telas.pack(fill="both", expand=True, padx=10, pady=10)
         self.container_telas.grid_rowconfigure(0, weight=1)
@@ -25,7 +24,7 @@ class App(customtkinter.CTk):
 
         self.frames = {}
 
-        # Inicializa todos os frames
+        # Inicialização
         for F in (CadastroFrame, ListaUsuariosFrame, DashboardFrame):
             nome = "cadastro" if F == CadastroFrame else "lista_usuarios" if F == ListaUsuariosFrame else "dashboard"
             frame = F(self.container_telas)

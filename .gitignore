@@ -10,7 +10,6 @@ build/
 *.egg-info/
 
 # Imagens PNG
-*.png
 
 # Arquivo de anotações
 anot.txt
