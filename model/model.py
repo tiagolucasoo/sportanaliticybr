@@ -67,6 +67,13 @@ class ModelAtleta:
         finally:
             conn.close()
     
+
+class ModelConsulta:
+    def rota_banco(self):
+        caminho_banco = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'database/app_data.db'))
+        conn = sqlite3.connect(caminho_banco)
+        return conn
+    
     def buscar_por_nome(self, nome):
         try:
             conn = self.rota_banco()
@@ -85,7 +92,7 @@ class ModelAtleta:
             conn = self.rota_banco()
             cursor = conn.cursor()
             cursor.execute("""
-                SELECT nome, altura, peso, idade, esporte_recomendado
+                SELECT id, nome, altura, peso, idade, esporte_recomendado
                 FROM usuario
             """)
             resultados = cursor.fetchall()

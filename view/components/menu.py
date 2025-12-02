@@ -8,8 +8,9 @@ class Menu(customtkinter.CTkFrame):
                        border_color="#1F271B",
                        border_width=2,
                        corner_radius=5,
+                       width=950,
                        height=250)
-        self.pack(side="top", fill="x",pady=10)
+        self.pack(side="top",pady=10)
         self.widget()
 
     def estiloButtonsMenu(self):

@@ -16,7 +16,7 @@ class DashboardFrame(customtkinter.CTkFrame):
     
     def listLabels(self):
         return [
-            "Dashbard - Consulta Por Id", #Container01
+            "Dashbard - Consulta Por Nome", #Container01
             "Indicadores de Perfomance", #Container02
         ]
     

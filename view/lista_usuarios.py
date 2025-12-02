@@ -45,8 +45,8 @@ class ListaUsuariosFrame(customtkinter.CTkFrame):
         for widget in self.frame_resultados.winfo_children():
             widget.destroy()
 
-        colunas = ["Nome", "Altura", "Peso", "Idade", "Esporte Sugerido"]
-        largura = [300, 75, 75, 75, 200]
+        colunas = ["Id", "Nome", "Altura", "Peso", "Idade", "Esporte Sugerido"]
+        largura = [25, 300, 75, 75, 75, 200]
 
         for i, texto in enumerate(colunas):
             label = customtkinter.CTkLabel(
